@@ -1,5 +1,17 @@
 const shoppingCart = []
 
+
+const totalQty = (idx, productId) => {
+    let qty = 1;
+    debugger
+    for (let i = 0; i < idx; i++) {
+        if (shoppingCart[i].id === productId)
+            qty += 1
+    }
+    return qty
+}
+
+
 const displayShoppingCart = () => {
     const cartEl = document.querySelector("#cartItems")
     cartEl.innerHTML = ""
@@ -8,20 +20,30 @@ const displayShoppingCart = () => {
 
     shoppingCart.forEach((product, idx) => {
 
+        /*for(let i = 0; i < idx; i++){
+            if(shoppingCart[i].id === productId)
+                qty += 1
+        }*/
+        let subTotal = product.qty * product.price
         cartEl.innerHTML +=
-        `
+        //console.log(product)
+            `
         <section class="shoppingCart__item">
         <div>${product.name}</div>
-        <div>${product.price.toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD"
-        })}</div>
+        <div>${product.qty}</div>
+        
+        <div>${subTotal.toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD"
+            })}</div>
 
-        <button id="${idx}" class="cart_removeButton">Remove</button>
+            <button id="${product.id}" class="cart_removeButton">Remove</button>
+
         </section>
         `
-
-        grandTotal += product.price
+// <button id="${idx}" class="cart_removeButton">Remove</button>
+           
+        grandTotal += subTotal
     })
 
     cartEl.innerHTML += `
@@ -39,15 +61,28 @@ const displayShoppingCart = () => {
         button.addEventListener(
             "click",
             (event) => {
-                const indexToRemove = parseInt(event.target.id)
-                shoppingCart.splice(indexToRemove, 1)
-                displayShoppingCart()
-            }
-        )
+                console.log(event.target)
+                //const indexToRemove = parseInt(event.target.id)
+                const foundProduct = products.find((product) => {
+                    return parseInt(event.target.id) === product.id
+                })
 
+                //debugger
+                shoppingCart.forEach((prod, indexToRemove) => {
+                    if (prod.id === foundProduct.id) {
+                        prod.qty -= 1
+                        if (prod.qty === 0){
+                            shoppingCart.splice(indexToRemove, 1)
+                        }
+                    }
+                    displayShoppingCart()
+                }
+                )
+
+            }
+            )
     }
 }
-
 
 
 

@@ -46,6 +46,7 @@ for (button of allButtons) {
     button.addEventListener(
         "click",
         (event) => {
+            //console.log(event)
             // Find the product whose `id` property is equal to
             // the "id" attribute of the button that was clicked on
             const foundProduct = products.find((product) => {
@@ -55,7 +56,21 @@ for (button of allButtons) {
             // Only if something was found, add the object to the
             // shopping cart array
             if (foundProduct !== null) {
-                shoppingCart.push(foundProduct)
+                let productInCart = false
+                //debugger
+                
+                shoppingCart.forEach((prod) => {
+                    if (prod.id === foundProduct.id){
+                        prod.qty += 1
+                        productInCart = true
+                    }
+                })
+                //if it the first item push it shipping cart array
+                if (productInCart === false){
+                    foundProduct.qty = 1
+                    shoppingCart.push(foundProduct)
+                }
+        
                 displayShoppingCart()
             }
 
